@@ -1,0 +1,82 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import requests
+
+
+api_key = '547e4e1e7c99ee57e3ed55b51a3085a2'
+
+lat = "43.16572"
+
+lon ="-79.46935"
+
+exclude = "minutely,hourly,alerts"
+
+url = 'https://api.openweathermap.org/data/3.0/onecall?lat={}&lon={}&exclude={}&appid={}'.format(lat, lon, exclude, api_key)
+
+res = requests.get(url)
+
+
+data = res.json()
+print(data)
+
+temperature = data['daily'][0]['temp']['day']
+
+temperature1 = data['daily'][1]['temp']['day']
+
+temperature2 = data['daily'][2]['temp']['day']
+
+temperature3 = data['daily'][3]['temp']['day']
+
+print('Temperature:', temperature,  temperature1, temperature2, temperature3)
+
+
+
+
+#Historical LINE
+# x axis values
+x1 = [27, 28, 29, 30 ]
+# corresponding y axis values
+y1 = [9, 11, 12, 12 ]
+
+
+
+# plotting the points
+plt.plot(x1, y1, color='green', linestyle='dashed', linewidth=3,
+         marker='o', markerfacecolor='blue', markersize=12)
+
+
+# Predicted LINE
+x2 = [27, 28, 29, 30]
+y2 = [int(temperature - 273), int(temperature1 - 273), int(temperature2 - 273), int(temperature3 - 273 )]
+
+# plotting the points
+plt.plot(x2, y2, color='red', linestyle='dashed', linewidth=3,
+         marker='o', markerfacecolor='purple', markersize=12)
+
+
+
+
+
+#limit decimals from appearing on x axis
+plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+
+# setting x and y axis range
+plt.ylim(0, 30)
+plt.xlim(27, 30)
+
+
+
+
+
+# naming the x axis
+plt.xlabel('Date')
+# naming the y axis
+plt.ylabel('Temperature C')
+
+# giving a title to my graph
+plt.title('Temp graph for the week')
+
+# save the created figure to a PNG (will overwrite itself)
+plt.savefig('graph.png')
+
+plt.show()
